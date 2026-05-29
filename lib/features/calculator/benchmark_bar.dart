@@ -19,7 +19,7 @@ class BenchmarkBar extends ConsumerWidget {
                 .bodySmall
                 ?.copyWith(color: colorMuted)),
         const SizedBox(height: 12),
-        _BenchmarkRow(label: '2050 target', value: target2050, userCo2: co2),
+        _BenchmarkRow(label: '2050 target 1.5°C fair share', value: target2050, userCo2: co2),
         _BenchmarkRow(label: 'Africa avg', value: africaAvg, userCo2: co2),
         _BenchmarkRow(label: 'S. America avg', value: southAmericaAvg, userCo2: co2),
         _BenchmarkRow(label: 'Asia avg', value: asiaAvg, userCo2: co2),
