@@ -8,7 +8,7 @@ class AboutScreen extends StatelessWidget {
 
   Future<void> _openDoi(String doi) async {
     final uri = Uri.parse('https://doi.org/$doi');
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (await canLaunchUrl(uri)) await launchUrl(uri);
   }
 
   @override
@@ -43,7 +43,7 @@ class AboutScreen extends StatelessWidget {
             Text('v1.0  ·  Yours suite', style: body),
             const SizedBox(height: 28),
 
-            Text('Privacy', style: heading),
+            Text('Privacy Policy', style: heading),
             const SizedBox(height: 6),
             Text(
               'No internet connection. No data stored. No permissions required.',
