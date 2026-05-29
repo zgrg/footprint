@@ -85,7 +85,7 @@ class _BenchmarkRow extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  left: (width * userFraction - 2).clamp(0.0, width - 4),
+                  left: width < 4 ? 0.0 : (width * userFraction - 2).clamp(0.0, width - 4),
                   child: Container(
                     width: 4,
                     height: 6,
