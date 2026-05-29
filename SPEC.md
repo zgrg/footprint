@@ -460,3 +460,59 @@ With `CLAUDE.md` at the root, Claude Code reads it automatically as project cont
 **To refactor:**
 > "Refactor result_display.dart to use TweenAnimationBuilder for the number count-up animation. Duration 200ms. Colour must transition smoothly between green/amber/red brackets."
 
+---
+
+## 12. Scientific Verification & References
+
+This section records the peer-reviewed basis for the formula and constants, the result of verifying the Perplexity-derived numbers, and recommended corrections. The aim is scientific defensibility, not precision — the app is an order-of-magnitude estimator, and this should be stated plainly in the About screen.
+
+### 12.1 Emission intensity constant (0.7 kg CO₂e per €1) — VERIFIED
+
+The central constant is well supported. Ivanova & Wood (2020) linked household expenditure across 26 EU countries to greenhouse-gas intensities from the EXIOBASE multi-regional input–output model and report an **EU average carbon intensity of ≈0.7 kg CO₂e per €1 of household expenditure**. The same EXIOBASE-based method underlies Ivanova et al. (2016). The figure is a *consumption-based* (supply-chain inclusive) intensity, which is the correct basis for a spend-driven estimator.
+
+Two caveats the spec should acknowledge:
+
+1. **Intensity is not flat across spending.** It varies strongly by category — transport/fuel ≈1.3 kg CO₂e/€, services and electronics lower — and it rises with income (Ivanova & Wood report ≈0.86 kg/€ for the EU top 10% and ≈0.95 kg/€ for the top 1%). A single 0.7 factor therefore *underestimates* high spenders and slightly overestimates low spenders. Acceptable for a simple model, but worth a one-line disclaimer.
+2. **Footprint grows slightly slower than spending** (expenditure elasticity < 1), because higher earners shift spending toward lower-intensity services. Strict proportionality (`spend × constant`) is thus a simplification, not a law.
+
+**Verdict:** Keep 0.7. It is the best-supported single number in the model.
+  
+### 12.2 Linear spend → emissions model — VERIFIED (as a simplification)
+
+Roughly two-thirds of global GHG emissions are directly or indirectly linked to household consumption (Ivanova et al., 2020), and per-capita footprint scales strongly with expenditure. The core claim — "spending power is the dominant variable" — is defensible. The linear form is a reasonable first-order approximation given the caveats in 12.1.
+
+### 12.3 Lifestyle factor (0.4–1.8) — PARTIALLY SUPPORTED / IS A MODELLING CONSTRUCT
+
+The *direction and rough magnitude* are supported. Wynes & Nicholas (2017) quantify the highest-impact individual actions (living car-free ≈2.0–2.6 t CO₂e/yr saved, avoiding one long-haul return flight ≈1.6 t, plant-based diet ≈0.8 t), and Ivanova et al. (2020) synthesise mitigation potentials across food, housing and transport. Together these justify that conscious choices can cut a footprint by roughly half and high-impact lifestyles can inflate it — consistent with a ~0.4–1.8 span.
+
+However, three honest limitations:
+
+1. The multiplier itself is **not a published constant**; it is the app's own construct. Present it as illustrative, not measured.
+2. It **partially double-counts spend.** Flying less and driving less also *reduce spending*, so the lifestyle factor and the spend slider are not fully independent — applying both multiplicatively can over-state the spread at the extremes.
+3. The anchor labels (plant-based, flights, transport) are qualitatively correct descriptors of the dominant levers.
+
+**Verdict:** Keep, but relabel in the About screen as an illustrative adjustment, not a literature value.
+
+### 12.4 Benchmarks — TWO CORRECTIONS NEEDED
+
+| Benchmark | Spec value | Assessment | Recommended (CO₂e, current) |
+|---|---|---|---|
+| 1.5 °C fair share | "2050 target" 2.5 t | ⚠️ **Mislabelled.** 2.5 t ≈ a *near-term (≈2030)* 1.5 °C-aligned per-capita fair share (Oxfam/IEEP cite ≈2.3 t). A true *2050* net-zero level is ≈0.5–1.5 t. | Relabel "1.5 °C fair share ≈2.3 t" |
+| German average | 8.0 t | ✅ Good — consumption/territorial ≈8.1 t CO₂e (2023). | 8.1 t |
+| EU average | 7.2 t | ⚠️ **Low / unit mismatch.** Eurostat 2023 GHG footprint = **9.0 t CO₂e** per capita. 7.2 looks like CO₂-only. | 9.0 t |
+| World average | 4.8 t | ⚠️ **Unit mismatch.** 4.8 ≈ CO₂-*only* territorial (~4.7 t). Full GHG footprint ≈6.7 t CO₂e. | 6.7 t |
+| Global top 1% | 74.0 t | ✅ Reasonable. Oxfam ≈70 t (consumption, 2019); Chancel (2022) ≈110 t *including investments*. | ~70 t (consumption) |
+
+**The key systemic issue is CO₂ vs CO₂e.** The formula and the 0.7 intensity are in CO₂**e** (all greenhouse gases), but two benchmarks (EU 7.2, World 4.8) appear to be CO₂-only. Mixing the two makes the comparison bar internally inconsistent. **Recommendation: state every benchmark in CO₂e** and use the right-hand column above. After this fix, a typical default run (€2,000/mo × factor 1.0 → ≈16.8 t) reads correctly as well above the EU average — which is itself a known feature of spend-based models overstating average households; consider noting the model is best for *relative* comparison, not absolute accuracy.
+
+### 12.5 References (DOI)
+
+- Ivanova, D., & Wood, R. (2020). The unequal distribution of household carbon footprints in Europe and its link to sustainability. *Global Sustainability*, 3, e18. https://doi.org/10.1017/sus.2020.12 — **source for the 0.7 kg CO₂e/€ intensity.**
+- Ivanova, D., Stadler, K., Steen-Olsen, K., Wood, R., Vita, G., Tukker, A., & Hertwich, E. G. (2016). Environmental Impact Assessment of Household Consumption. *Journal of Industrial Ecology*, 20(3), 526–536. https://doi.org/10.1111/jiec.12371 — household consumption as a primary emissions driver; EXIOBASE method.
+- Ivanova, D., Barrett, J., Wiedenhofer, D., Macura, B., Callaghan, M., & Creutzig, F. (2020). Quantifying the potential for climate change mitigation of consumption options. *Environmental Research Letters*, 15(9), 093001. https://doi.org/10.1088/1748-9326/ab8589 — ~two-thirds of GHG from consumption; mitigation potentials underpinning the lifestyle factor.
+- Wynes, S., & Nicholas, K. A. (2017). The climate mitigation gap. *Environmental Research Letters*, 12(7), 074024. https://doi.org/10.1088/1748-9326/aa7541 — high-impact lifestyle actions (diet, flights, car-free); basis for lifestyle anchors. *(This is the "Lund University" source named in the About screen.)*
+- Chancel, L. (2022). Global carbon inequality over 1990–2019. *Nature Sustainability*, 5(11), 931–938. https://doi.org/10.1038/s41893-022-00955-z — top 1% per-capita footprint.
+- Stadler, K., et al. (2018). EXIOBASE 3: Developing a Time Series of Detailed Environmentally Extended Multi-Regional Input–Output Tables. *Journal of Industrial Ecology*, 22(3), 502–515. https://doi.org/10.1111/jiec.12715 — the underlying emission-intensity database.
+
+Non-DOI data sources (statistics, no DOI): Eurostat, *Greenhouse gas emission footprints* (EU & member-state per-capita CO₂e, 2023); IPCC (2018), *Global Warming of 1.5 °C* (SR15) for the 1.5 °C carbon budget; Oxfam/IEEP (2021), *Carbon inequality in 2030* for the fair-share and top-1% figures.
+

@@ -3,49 +3,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants.dart';
 import '../../shared/providers/providers.dart';
 
-class BenchmarkBar extends ConsumerStatefulWidget {
+class BenchmarkBar extends ConsumerWidget {
   const BenchmarkBar({super.key});
 
   @override
-  ConsumerState<BenchmarkBar> createState() => _BenchmarkBarState();
-}
-
-class _BenchmarkBarState extends ConsumerState<BenchmarkBar> {
-  bool _expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final co2 = ref.watch(co2ResultProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () => setState(() => _expanded = !_expanded),
-          child: Row(
-            children: [
-              Text('Compare',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: colorMuted)),
-              const SizedBox(width: 4),
-              Icon(
-                _expanded ? Icons.expand_less : Icons.expand_more,
-                size: 16,
-                color: colorMuted,
-              ),
-            ],
-          ),
-        ),
-        if (_expanded) ...[
-          const SizedBox(height: 12),
-          _BenchmarkRow(label: '2050 target', value: target2050, userCo2: co2),
-          _BenchmarkRow(label: 'World avg', value: worldAvg, userCo2: co2),
-          _BenchmarkRow(label: 'EU avg', value: euAvg, userCo2: co2),
-          _BenchmarkRow(label: 'German avg', value: germanAvg, userCo2: co2),
-          _BenchmarkRow(label: 'Top 1%', value: top1Percent, userCo2: co2),
-        ],
+        Text('Compare',
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: colorMuted)),
+        const SizedBox(height: 12),
+        _BenchmarkRow(label: '2050 target', value: target2050, userCo2: co2),
+        _BenchmarkRow(label: 'Africa avg', value: africaAvg, userCo2: co2),
+        _BenchmarkRow(label: 'S. America avg', value: southAmericaAvg, userCo2: co2),
+        _BenchmarkRow(label: 'Asia avg', value: asiaAvg, userCo2: co2),
+        _BenchmarkRow(label: 'World avg', value: worldAvg, userCo2: co2),
+        _BenchmarkRow(label: 'EU avg', value: euAvg, userCo2: co2),
+        _BenchmarkRow(label: 'Oceania avg', value: oceaniaAvg, userCo2: co2),
+        _BenchmarkRow(label: 'N. America avg', value: northAmericaAvg, userCo2: co2),
       ],
     );
   }
@@ -65,7 +46,7 @@ class _BenchmarkRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isBelow = userCo2 <= value;
-    final barMax = top1Percent;
+    final barMax = [northAmericaAvg * 1.2, userCo2 * 1.1].reduce((a, b) => a > b ? a : b);
     final fraction = (value / barMax).clamp(0.0, 1.0);
     final userFraction = (userCo2 / barMax).clamp(0.0, 1.0);
 

@@ -38,11 +38,31 @@ class ResultDisplay extends ConsumerWidget {
           builder: (context, value, _) {
             final animBracket = resultBracket(value);
             final animColor = _bracketColor(animBracket);
-            return Text(
-              '${value.toStringAsFixed(1)} t CO₂e/year',
-              style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    color: animColor,
-                  ),
+            final accuracy = value * accuracyFraction;
+            return Column(
+              children: [
+                Text(
+                  value.toStringAsFixed(1),
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        color: animColor,
+                      ),
+                ),
+                Text(
+                  't CO₂e / year',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: animColor,
+                        letterSpacing: 1.0,
+                      ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  '± ${accuracy.toStringAsFixed(1)} t  (±30% estimation range)',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: colorMuted),
+                ),
+              ],
             );
           },
         ),

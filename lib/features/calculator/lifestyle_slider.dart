@@ -6,17 +6,27 @@ import '../../shared/providers/providers.dart';
 class LifestyleSlider extends ConsumerWidget {
   const LifestyleSlider({super.key});
 
-  String _label(double factor) {
-    if (factor <= 0.5) return 'Minimal';
-    if (factor <= 0.8) return 'Low';
-    if (factor <= 1.1) return 'Average';
-    if (factor <= 1.4) return 'High';
-    return 'Very high';
+  // Awareness is the inverse of the CO2 factor:
+  // high awareness → low factor → less CO2
+  double _factorToAwareness(double factor) =>
+      lifestyleMax + lifestyleMin - factor;
+
+  double _awarenessToFactor(double awareness) =>
+      (lifestyleMax + lifestyleMin - awareness)
+          .clamp(lifestyleMin, lifestyleMax);
+
+  String _label(double awareness) {
+    if (awareness >= 1.5) return 'Very high';
+    if (awareness >= 1.2) return 'High';
+    if (awareness >= 0.9) return 'Average';
+    if (awareness >= 0.6) return 'Low';
+    return 'Very low';
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final factor = ref.watch(lifestyleFactorProvider);
+    final awareness = _factorToAwareness(factor);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,32 +34,40 @@ class LifestyleSlider extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Lifestyle intensity',
+            Text('CO₂ awareness',
                 style: Theme.of(context).textTheme.bodyMedium),
-            Text(_label(factor),
+            Text(_label(awareness),
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium
                     ?.copyWith(color: colorText, fontWeight: FontWeight.bold)),
           ],
         ),
+        const SizedBox(height: 4),
+        Text(
+          'Less meat · less flying · public transport · less consumption',
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: colorMuted),
+        ),
         const SizedBox(height: 8),
         Slider(
-          value: factor,
+          value: awareness,
           min: lifestyleMin,
           max: lifestyleMax,
           divisions: ((lifestyleMax - lifestyleMin) / lifestyleStep).round(),
-          onChanged: (v) =>
-              ref.read(lifestyleFactorProvider.notifier).state =
-                  double.parse(v.toStringAsFixed(1)),
+          onChanged: (v) {
+            final newFactor = _awarenessToFactor(
+                double.parse(v.toStringAsFixed(1)));
+            ref.read(lifestyleFactorProvider.notifier).state = newFactor;
+          },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Minimal',
-                style: Theme.of(context).textTheme.bodySmall),
-            Text('Very high',
-                style: Theme.of(context).textTheme.bodySmall),
+            Text('Very low', style: Theme.of(context).textTheme.bodySmall),
+            Text('Very high', style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ],
