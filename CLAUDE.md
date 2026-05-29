@@ -1,0 +1,69 @@
+# CLAUDE.md — Footprint App
+
+## What this app is
+A two-slider CO₂ footprint estimator. Part of the "Yours" privacy-first tool suite.
+Zero permissions. Zero network calls. Zero data stored. Fully offline.
+
+## Core formula
+co2_tonnes_per_year = monthly_spend_eur × 12 × lifestyle_factor × 0.0007
+Emission intensity source: EU average 0.7 kg CO₂e per €1 household spend.
+
+## Architecture rules (never break these)
+1. No HTTP calls anywhere — no dio, no http package, no Firebase, no analytics
+2. No SharedPreferences or any persistence — all state is in-memory only
+3. No permissions — AndroidManifest and Info.plist must stay clean
+4. State: flutter_riverpod only — no setState except inside StatefulWidget animations
+5. Navigation: go_router only
+6. Fonts: google_fonts must use bundled assets (offline), not CDN fetch
+
+## Folder structure
+lib/
+  main.dart
+  app/         → app.dart, router.dart, theme.dart
+  core/        → constants.dart, formula.dart
+  features/
+    calculator/ → calculator_screen.dart, spend_slider.dart,
+                  lifestyle_slider.dart, result_display.dart, benchmark_bar.dart
+    about/      → about_screen.dart
+  shared/
+    widgets/   → yours_label.dart
+    providers/ → providers.dart
+
+## Providers (shared/providers/providers.dart)
+- monthlySpendProvider: StateProvider<double>, default 2000.0
+- lifestyleFactorProvider: StateProvider<double>, default 1.0
+- co2ResultProvider: Provider<double> — derived, never set directly
+
+## Design tokens
+Background: #0F0F0E | Surface: #1A1917 | Elevated: #242220
+Text: #E8E6E1 | Muted: #7A7875
+Green (< 4t): #4A9B6F | Amber (4–8t): #C47B2B | Red (> 8t): #B84B3A
+Font: DM Sans (bundled) | Result size: 56sp bold tabular
+
+## Slider specs
+- Spend: 500–10,000 EUR, step 50, default 2000
+- Lifestyle: 0.4–1.8, step 0.1, default 1.0
+- Both use custom SliderTheme — no default Flutter blue
+
+## Result display
+- Shows X.X t CO₂e/year, animated on change (TweenAnimationBuilder, 200ms)
+- Colour transitions with result bracket
+- Comparison: "X× the 2050 target (2.5t)" or "Below 2050 target 🌱"
+- Expandable benchmark bar: 2050 target / World avg / EU avg / German avg / Top 1%
+
+## Privacy statement (shown in About screen)
+"This app has no internet connection, stores nothing, and knows nothing about you.
+Your data is your data."
+
+## Testing
+- formula_test.dart: unit tests for co2FromSpend() and resultBracket()
+- widget_test.dart: smoke test both screens render without error
+- No golden tests required for v1
+
+## What NOT to do
+- Do not add any splash screens that require network images
+- Do not add Firebase, Crashlytics, Sentry, or any remote logging
+- Do not add in-app purchases or ads
+- Do not add login, accounts, or any user identity concept
+- Do not persist slider values between sessions (intentional — reinforces privacy)
+- Do not add more than these two screens for v1
