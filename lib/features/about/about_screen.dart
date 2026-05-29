@@ -8,7 +8,7 @@ class AboutScreen extends StatelessWidget {
 
   Future<void> _openDoi(String doi) async {
     final uri = Uri.parse('https://doi.org/$doi');
-    if (await canLaunchUrl(uri)) await launchUrl(uri);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
   @override
