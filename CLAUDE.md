@@ -5,8 +5,9 @@ A two-slider CO₂ footprint estimator. Part of the "Yours" privacy-first tool s
 Zero permissions. Zero network calls. Zero data stored. Fully offline.
 
 ## Core formula
-co2_tonnes_per_year = monthly_spend_eur × 12 × lifestyle_factor × 0.0007
+co2_tonnes_per_year = monthly_spend_eur × 12 × awareness_factor × 0.0007
 Emission intensity source: EU average 0.7 kg CO₂e per €1 household spend.
+awareness_factor range: 0.4 (very high awareness) → 1.8 (very low awareness) — inverted scale.
 
 ## Architecture rules (never break these)
 1. No HTTP calls anywhere — no dio, no http package, no Firebase, no analytics
@@ -31,7 +32,7 @@ lib/
 
 ## Providers (shared/providers/providers.dart)
 - monthlySpendProvider: StateProvider<double>, default 2000.0
-- lifestyleFactorProvider: StateProvider<double>, default 1.0
+- lifestyleFactorProvider: StateProvider<double>, default 1.0 — internal name kept for code stability; represents the awareness_factor (inverted: high awareness = low factor)
 - co2ResultProvider: Provider<double> — derived, never set directly
 
 ## Design tokens
@@ -42,14 +43,15 @@ Font: DM Sans (bundled) | Result size: 56sp bold tabular
 
 ## Slider specs
 - Spend: 500–10,000 EUR, step 50, default 2000
-- Lifestyle: 0.4–1.8, step 0.1, default 1.0
+- CO₂ awareness: slider range 0.4–1.8, step 0.1, default 1.0 (displayed inverted: right = high awareness = low factor)
 - Both use custom SliderTheme — no default Flutter blue
 
 ## Result display
-- Shows X.X t CO₂e/year, animated on change (TweenAnimationBuilder, 200ms)
+- Shows X.X (large) and "t CO₂e / year" on separate rows, animated on change (TweenAnimationBuilder, 200ms)
+- ±30% accuracy range shown below the result
 - Colour transitions with result bracket
-- Comparison: "X× the 2050 target (2.5t)" or "Below 2050 target 🌱"
-- Expandable benchmark bar: 2050 target / World avg / EU avg / German avg / Top 1%
+- Comparison: "X× the 1.5°C fair share (2.5t)" or "Below 1.5°C fair share 🌱"
+- Benchmark bar always visible: 1.5°C fair share / continent averages (Africa → S. America → Asia → World → EU → Oceania → N. America)
 
 ## Privacy statement (shown in About screen)
 "This app has no internet connection, stores nothing, and knows nothing about you.

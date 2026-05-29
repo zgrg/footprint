@@ -8,7 +8,7 @@
 
 ## 1. Concept & Purpose
 
-Footprint is a radically simple CO₂ estimator. It makes one philosophical argument visible: **your spending power is the dominant variable in your carbon footprint**, and your lifestyle choices act as a multiplier on that base. Two sliders. One number. No accounts, no tracking, no permissions.
+Footprint is a radically simple CO₂ estimator. It makes one philosophical argument visible: **your spending power is the dominant variable in your carbon footprint**, and your CO₂ awareness acts as a multiplier on that base. Two sliders. One number. No accounts, no tracking, no permissions.
 
 The app belongs to the *Yours* suite of privacy-conscious tools — apps that require zero permissions, collect no data, make no network calls, and sell nothing.
 
@@ -17,33 +17,40 @@ The app belongs to the *Yours* suite of privacy-conscious tools — apps that re
 ## 2. Core Formula
 
 ```
-CO₂e (tonnes/year) = monthly_spend_eur × 12 × lifestyle_factor × 0.0007
+CO₂e (tonnes/year) = monthly_spend_eur × 12 × awareness_factor × 0.0007
 ```
 
 Where:
 - `monthly_spend_eur` — total monthly household spending in EUR (range: 500–10,000)
-- `lifestyle_factor` — multiplier reflecting green vs. high-impact choices (range: 0.4–1.8)
+- `awareness_factor` — multiplier reflecting CO₂ awareness (range: 0.4–1.8, **inverted**: high awareness = low factor = less CO₂)
 - `0.0007` — EU average emission intensity: 0.7 kg CO₂e per €1 spent, converted to tonnes
 
-### Lifestyle Factor Anchors
+### CO₂ Awareness Factor Anchors
 
-| Factor Value | Label | Description |
+Slider displayed inverted: right = high awareness = low factor.
+
+| Factor Value | Awareness | Description |
 |---|---|---|
-| 0.4 | 🌿 Very conscious | Plant-based diet, no flights, public transport only |
-| 0.7 | 🚲 Tries to reduce | Mostly vegetarian, rare flights, mixed transport |
-| 1.0 | ⚖️ EU average | Typical European lifestyle |
-| 1.4 | 🚗 Comfortable | Drives daily, occasional flights, mixed diet |
-| 1.8 | 🔥 High impact | Frequent flights, car-dependent, meat-heavy diet |
+| 0.4 | Very high | Plant-based diet, no flights, public transport only |
+| 0.7 | High | Mostly vegetarian, rare flights, mixed transport |
+| 1.0 | Average | Typical European lifestyle |
+| 1.4 | Low | Drives daily, occasional flights, mixed diet |
+| 1.8 | Very low | Frequent flights, car-dependent, meat-heavy diet |
 
 ### Reference Benchmarks (shown in result screen)
 
+Territorial CO₂ per capita (GCP / Our World in Data, 2023). Ordered low → high.
+
 | Benchmark | Value |
 |---|---|
-| 🌍 Global 2050 target | 2.5 t/year |
-| 🇩🇪 German average | 8.0 t/year |
-| 🇪🇺 EU average | 7.2 t/year |
-| 🌏 World average | 4.8 t/year |
-| 💰 Global top 1% | 74.0 t/year |
+| 🌍 1.5°C fair share | 2.5 t/year |
+| 🌍 Africa avg | 1.0 t/year |
+| 🌎 S. America avg | 2.5 t/year |
+| 🌏 Asia avg | 4.6 t/year |
+| 🌐 World avg | 4.7 t/year |
+| 🇪🇺 EU avg | 6.5 t/year |
+| 🌏 Oceania avg | 10.0 t/year |
+| 🌎 N. America avg | 10.3 t/year |
 
 ---
 
@@ -57,27 +64,25 @@ The only interactive screen. Full-screen, minimal.
 1. App name: `footprint` — small, muted, top-left
 2. Suite label: `yours ·` — even smaller, inline before app name
 3. **Slider 1 — Monthly Spend**
-   - Label: "What do you spend per month?"
-   - Sub-label: "All expenses — rent, food, travel, everything"
+   - Label: "Monthly spend" with live EUR value
    - Range: €500 → €10,000 (step: €50)
    - Default: €2,000
-   - Display: live EUR value above thumb, formatted with thousands separator
-4. **Slider 2 — Lifestyle**
-   - Label: "How much do you care?"
-   - Range: 0.4 → 1.8 (step: 0.1)
-   - Default: 1.0
-   - Display: emoji + label from anchor table above, updates live
+4. **Slider 2 — CO₂ Awareness**
+   - Label: "CO₂ awareness" with sub-label: "Less meat · less flying · public transport · less consumption"
+   - Range: Very low → Very high (inverted: right = high awareness = less CO₂)
+   - Default: Average
 5. **Result block** — large animated number:
-   - `X.X tonnes CO₂e / year`
+   - `X.X` (56sp, colour-coded) on one row, `t CO₂e / year` on the next
    - Colour-coded: green (<4t), amber (4–8t), red (>8t)
-   - Comparison line: "That's [X]× the 2050 target" or "You're below the 2050 target 🌱"
-6. **"See context" chevron** — expands inline to show the 5 reference benchmarks as a small comparison bar
+   - `± X.X t (±30% estimation range)` shown below in muted text
+   - Comparison line: "[X]× the 1.5°C fair share (2.5t)" or "Below 1.5°C fair share 🌱"
+6. **Benchmark bar** — always visible, shows all 8 reference benchmarks as horizontal bars with user position marker
 
 ### Screen 2 — About (accessible via ℹ️ icon, top-right)
 
 Single scrollable screen:
 - What the app calculates and how (formula explained in plain language)
-- Data sources (EU emission intensity, Lund University lifestyle research)
+- Data sources (EU emission intensity, Lund University awareness research)
 - Privacy statement: *"This app has no internet connection, stores nothing, and knows nothing about you. Your data is your data."*
 - Link to Yours suite (opens browser)
 - Version number
@@ -210,42 +215,33 @@ dev_dependencies:
 ## 7. Constants (core/constants.dart)
 
 ```dart
-class FootprintConstants {
-  // Formula
-  static const double emissionIntensityEuKgPerEur = 0.7;
-  static const double euToTonnes = 0.001;
+// Slider ranges
+const double spendMin = 500.0;
+const double spendMax = 10000.0;
+const double spendDefault = 2000.0;
+const double spendStep = 50.0;
 
-  // Slider ranges
-  static const double minSpend = 500.0;
-  static const double maxSpend = 10000.0;
-  static const double defaultSpend = 2000.0;
-  static const double spendStep = 50.0;
+const double lifestyleMin = 0.4;   // awareness_factor: high awareness = low value
+const double lifestyleMax = 1.8;
+const double lifestyleDefault = 1.0;
+const double lifestyleStep = 0.1;
 
-  static const double minLifestyle = 0.4;
-  static const double maxLifestyle = 1.8;
-  static const double defaultLifestyle = 1.0;
-  static const double lifestyleStep = 0.1;
+// Benchmarks — territorial CO₂ per capita, 2023 (GCP / Our World in Data)
+const double target2050 = 2.5;       // 1.5°C fair share
+const double africaAvg = 1.0;
+const double southAmericaAvg = 2.5;
+const double asiaAvg = 4.6;
+const double worldAvg = 4.7;
+const double euAvg = 6.5;
+const double oceaniaAvg = 10.0;
+const double northAmericaAvg = 10.3;
 
-  // Benchmarks (tonnes/year)
-  static const double target2050 = 2.5;
-  static const double germanAverage = 8.0;
-  static const double euAverage = 7.2;
-  static const double worldAverage = 4.8;
-  static const double top1Percent = 74.0;
+// Result colour thresholds
+const double bracketGreenMax = 4.0;
+const double bracketAmberMax = 8.0;
 
-  // Result colour thresholds
-  static const double greenThreshold = 4.0;
-  static const double amberThreshold = 8.0;
-
-  // Lifestyle labels
-  static const List<Map<String, dynamic>> lifestyleAnchors = [
-    {'value': 0.4, 'emoji': '🌿', 'label': 'Very conscious'},
-    {'value': 0.7, 'emoji': '🚲', 'label': 'Tries to reduce'},
-    {'value': 1.0, 'emoji': '⚖️', 'label': 'EU average'},
-    {'value': 1.4, 'emoji': '🚗', 'label': 'Comfortable'},
-    {'value': 1.8, 'emoji': '🔥', 'label': 'High impact'},
-  ];
-}
+// Accuracy
+const double accuracyFraction = 0.30;
 ```
 
 ---
@@ -254,21 +250,13 @@ class FootprintConstants {
 
 ```dart
 /// Pure function — no side effects, fully testable
-double co2FromSpend({
-  required double monthlySpendEur,
-  required double lifestyleFactor,
-}) {
-  return monthlySpendEur *
-      12 *
-      lifestyleFactor *
-      FootprintConstants.emissionIntensityEuKgPerEur *
-      FootprintConstants.euToTonnes;
+double co2FromSpend(double monthlySpendEur, double lifestyleFactor) {
+  return monthlySpendEur * 12 * lifestyleFactor * 0.0007;
 }
 
-/// Returns result colour based on value
-ResultBracket resultBracket(double co2Tonnes) {
-  if (co2Tonnes < FootprintConstants.greenThreshold) return ResultBracket.green;
-  if (co2Tonnes < FootprintConstants.amberThreshold) return ResultBracket.amber;
+ResultBracket resultBracket(double co2TonnesPerYear) {
+  if (co2TonnesPerYear < bracketGreenMax) return ResultBracket.green;
+  if (co2TonnesPerYear <= bracketAmberMax) return ResultBracket.amber;
   return ResultBracket.red;
 }
 
@@ -460,59 +448,5 @@ With `CLAUDE.md` at the root, Claude Code reads it automatically as project cont
 **To refactor:**
 > "Refactor result_display.dart to use TweenAnimationBuilder for the number count-up animation. Duration 200ms. Colour must transition smoothly between green/amber/red brackets."
 
----
 
-## 12. Scientific Verification & References
-
-This section records the peer-reviewed basis for the formula and constants, the result of verifying the Perplexity-derived numbers, and recommended corrections. The aim is scientific defensibility, not precision — the app is an order-of-magnitude estimator, and this should be stated plainly in the About screen.
-
-### 12.1 Emission intensity constant (0.7 kg CO₂e per €1) — VERIFIED
-
-The central constant is well supported. Ivanova & Wood (2020) linked household expenditure across 26 EU countries to greenhouse-gas intensities from the EXIOBASE multi-regional input–output model and report an **EU average carbon intensity of ≈0.7 kg CO₂e per €1 of household expenditure**. The same EXIOBASE-based method underlies Ivanova et al. (2016). The figure is a *consumption-based* (supply-chain inclusive) intensity, which is the correct basis for a spend-driven estimator.
-
-Two caveats the spec should acknowledge:
-
-1. **Intensity is not flat across spending.** It varies strongly by category — transport/fuel ≈1.3 kg CO₂e/€, services and electronics lower — and it rises with income (Ivanova & Wood report ≈0.86 kg/€ for the EU top 10% and ≈0.95 kg/€ for the top 1%). A single 0.7 factor therefore *underestimates* high spenders and slightly overestimates low spenders. Acceptable for a simple model, but worth a one-line disclaimer.
-2. **Footprint grows slightly slower than spending** (expenditure elasticity < 1), because higher earners shift spending toward lower-intensity services. Strict proportionality (`spend × constant`) is thus a simplification, not a law.
-
-**Verdict:** Keep 0.7. It is the best-supported single number in the model.
-  
-### 12.2 Linear spend → emissions model — VERIFIED (as a simplification)
-
-Roughly two-thirds of global GHG emissions are directly or indirectly linked to household consumption (Ivanova et al., 2020), and per-capita footprint scales strongly with expenditure. The core claim — "spending power is the dominant variable" — is defensible. The linear form is a reasonable first-order approximation given the caveats in 12.1.
-
-### 12.3 Lifestyle factor (0.4–1.8) — PARTIALLY SUPPORTED / IS A MODELLING CONSTRUCT
-
-The *direction and rough magnitude* are supported. Wynes & Nicholas (2017) quantify the highest-impact individual actions (living car-free ≈2.0–2.6 t CO₂e/yr saved, avoiding one long-haul return flight ≈1.6 t, plant-based diet ≈0.8 t), and Ivanova et al. (2020) synthesise mitigation potentials across food, housing and transport. Together these justify that conscious choices can cut a footprint by roughly half and high-impact lifestyles can inflate it — consistent with a ~0.4–1.8 span.
-
-However, three honest limitations:
-
-1. The multiplier itself is **not a published constant**; it is the app's own construct. Present it as illustrative, not measured.
-2. It **partially double-counts spend.** Flying less and driving less also *reduce spending*, so the lifestyle factor and the spend slider are not fully independent — applying both multiplicatively can over-state the spread at the extremes.
-3. The anchor labels (plant-based, flights, transport) are qualitatively correct descriptors of the dominant levers.
-
-**Verdict:** Keep, but relabel in the About screen as an illustrative adjustment, not a literature value.
-
-### 12.4 Benchmarks — TWO CORRECTIONS NEEDED
-
-| Benchmark | Spec value | Assessment | Recommended (CO₂e, current) |
-|---|---|---|---|
-| 1.5 °C fair share | "2050 target" 2.5 t | ⚠️ **Mislabelled.** 2.5 t ≈ a *near-term (≈2030)* 1.5 °C-aligned per-capita fair share (Oxfam/IEEP cite ≈2.3 t). A true *2050* net-zero level is ≈0.5–1.5 t. | Relabel "1.5 °C fair share ≈2.3 t" |
-| German average | 8.0 t | ✅ Good — consumption/territorial ≈8.1 t CO₂e (2023). | 8.1 t |
-| EU average | 7.2 t | ⚠️ **Low / unit mismatch.** Eurostat 2023 GHG footprint = **9.0 t CO₂e** per capita. 7.2 looks like CO₂-only. | 9.0 t |
-| World average | 4.8 t | ⚠️ **Unit mismatch.** 4.8 ≈ CO₂-*only* territorial (~4.7 t). Full GHG footprint ≈6.7 t CO₂e. | 6.7 t |
-| Global top 1% | 74.0 t | ✅ Reasonable. Oxfam ≈70 t (consumption, 2019); Chancel (2022) ≈110 t *including investments*. | ~70 t (consumption) |
-
-**The key systemic issue is CO₂ vs CO₂e.** The formula and the 0.7 intensity are in CO₂**e** (all greenhouse gases), but two benchmarks (EU 7.2, World 4.8) appear to be CO₂-only. Mixing the two makes the comparison bar internally inconsistent. **Recommendation: state every benchmark in CO₂e** and use the right-hand column above. After this fix, a typical default run (€2,000/mo × factor 1.0 → ≈16.8 t) reads correctly as well above the EU average — which is itself a known feature of spend-based models overstating average households; consider noting the model is best for *relative* comparison, not absolute accuracy.
-
-### 12.5 References (DOI)
-
-- Ivanova, D., & Wood, R. (2020). The unequal distribution of household carbon footprints in Europe and its link to sustainability. *Global Sustainability*, 3, e18. https://doi.org/10.1017/sus.2020.12 — **source for the 0.7 kg CO₂e/€ intensity.**
-- Ivanova, D., Stadler, K., Steen-Olsen, K., Wood, R., Vita, G., Tukker, A., & Hertwich, E. G. (2016). Environmental Impact Assessment of Household Consumption. *Journal of Industrial Ecology*, 20(3), 526–536. https://doi.org/10.1111/jiec.12371 — household consumption as a primary emissions driver; EXIOBASE method.
-- Ivanova, D., Barrett, J., Wiedenhofer, D., Macura, B., Callaghan, M., & Creutzig, F. (2020). Quantifying the potential for climate change mitigation of consumption options. *Environmental Research Letters*, 15(9), 093001. https://doi.org/10.1088/1748-9326/ab8589 — ~two-thirds of GHG from consumption; mitigation potentials underpinning the lifestyle factor.
-- Wynes, S., & Nicholas, K. A. (2017). The climate mitigation gap. *Environmental Research Letters*, 12(7), 074024. https://doi.org/10.1088/1748-9326/aa7541 — high-impact lifestyle actions (diet, flights, car-free); basis for lifestyle anchors. *(This is the "Lund University" source named in the About screen.)*
-- Chancel, L. (2022). Global carbon inequality over 1990–2019. *Nature Sustainability*, 5(11), 931–938. https://doi.org/10.1038/s41893-022-00955-z — top 1% per-capita footprint.
-- Stadler, K., et al. (2018). EXIOBASE 3: Developing a Time Series of Detailed Environmentally Extended Multi-Regional Input–Output Tables. *Journal of Industrial Ecology*, 22(3), 502–515. https://doi.org/10.1111/jiec.12715 — the underlying emission-intensity database.
-
-Non-DOI data sources (statistics, no DOI): Eurostat, *Greenhouse gas emission footprints* (EU & member-state per-capita CO₂e, 2023); IPCC (2018), *Global Warming of 1.5 °C* (SR15) for the 1.5 °C carbon budget; Oxfam/IEEP (2021), *Carbon inequality in 2030* for the fair-share and top-1% figures.
 
