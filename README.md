@@ -47,7 +47,7 @@ Requires Flutter ≥ 3.22 / Dart ≥ 3.4.
 
 ## How it was built
 
-- **Concept & product direction:** Gergely Zuban
+- **Concept & product direction:** zgrg
 - **Technical specification:** generated with [Perplexity AI](https://www.perplexity.ai)
 - **Implementation:** written with [Claude Code](https://claude.com/claude-code) (Anthropic)
 
@@ -65,5 +65,5 @@ Key references:
 
 ## License
 
-MIT — see [LICENSE](LICENSE).  
-Copyright (c) 2026 Gergely Zuban.
+All rights reserved — see [LICENSE](LICENSE).  
+Copyright (c) 2026 zgrg.
