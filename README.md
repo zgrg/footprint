@@ -8,7 +8,7 @@ Two sliders. One number. No accounts, no tracking, no permissions, no network ca
 
 ## What it does
 
-Footprint makes one argument visible: your spending power is the dominant variable in your carbon footprint, and your CO₂ awareness acts as a multiplier on that base.
+Co2 Footprint Easy makes one argument visible: your spending power is the dominant variable in your carbon footprint, and your CO₂ awareness acts as a multiplier on that base.
 
 ```
 CO₂e (t/year) = monthly spend × 12 × awareness factor × 0.0007
@@ -65,5 +65,5 @@ Key references:
 
 ## License
 
-MIT — see [LICENSE](LICENSE).  
+All rights reserved — see [LICENSE](LICENSE).
 Copyright (c) 2026 NoTrackApps (Gergely Zuban).
