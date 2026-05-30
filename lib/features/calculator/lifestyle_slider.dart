@@ -22,17 +22,10 @@ class LifestyleSlider extends ConsumerWidget {
     return s.veryLow;
   }
 
-  Color _awarenessColor(double awareness) {
-    if (awareness >= 1.2) return colorGreen;
-    if (awareness >= 0.9) return colorAmber;
-    return colorRed;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final factor    = ref.watch(lifestyleFactorProvider);
     final awareness = _factorToAwareness(factor);
-    final color     = _awarenessColor(awareness);
     final s         = AppStrings.of(context);
 
     return Column(
@@ -45,7 +38,7 @@ class LifestyleSlider extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodyMedium),
             Text(_label(awareness, s),
                 style: Theme.of(context).textTheme.bodyMedium
-                    ?.copyWith(color: color, fontWeight: FontWeight.bold)),
+                    ?.copyWith(color: colorAmber, fontWeight: FontWeight.bold)),
           ],
         ),
         const SizedBox(height: 4),
@@ -57,9 +50,9 @@ class LifestyleSlider extends ConsumerWidget {
         const SizedBox(height: 8),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
-            activeTrackColor: color,
-            thumbColor: color,
-            overlayColor: color.withAlpha(40),
+            activeTrackColor: colorAmber,
+            thumbColor: colorAmber,
+            overlayColor: colorAmber.withAlpha(40),
           ),
           child: Slider(
             value: awareness,
