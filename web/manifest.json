@@ -3,9 +3,9 @@
     "short_name": "footprint",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0F0F0E",
+    "theme_color": "#0F0F0E",
+    "description": "A minimal CO₂ footprint estimator. No tracking. No data stored.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
