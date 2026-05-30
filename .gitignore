@@ -52,5 +52,6 @@ android/.kotlin/
 *.p12
 *.keystore
 android/key.properties
+android/upload_certificate.pem
 google-services.json
 GoogleService-Info.plist
