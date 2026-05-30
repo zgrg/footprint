@@ -62,6 +62,30 @@ Your data is your data."
 - widget_test.dart: smoke test both screens render without error
 - No golden tests required for v1
 
+## Localisation (lib/core/l10n.dart)
+- 5 languages: English (en), Mandarin (zh), Hindi (hi), Spanish (es), French (fr)
+- AppStrings class + AppStringsDelegate — use AppStrings.of(context) in all widgets
+- localeProvider (Riverpod) drives the app locale; initialised from OS language in main.dart
+- LanguageSelector widget at bottom of calculator screen: flag emoji buttons
+- Do NOT use hardcoded strings in widgets — always go through AppStrings
+
+## Android emulator setup (Pixel 6a, emulator-5554)
+- Impeller disabled in AndroidManifest.xml (causes black screen on x86 OpenGLES):
+  `<meta-data android:name="io.flutter.embedding.android.EnableImpeller" android:value="false"/>`
+- Windows Firewall blocks the Dart VM Service on random ports — use a fixed port:
+  `flutter run -d emulator-5554 --host-vmservice-port 40300`
+- Port 40300 has inbound + outbound firewall rules added for this machine
+- Port 50300 is in the Windows reserved range — do not use it
+- If emulator freezes: `flutter emulators --launch Pixel_6a` then wait for `device` status in adb
+- adb location: `%LOCALAPPDATA%\Android\Sdk\platform-tools\adb.exe`
+
+## GitHub / deployment
+- Repo: https://github.com/zgrg/footprint
+- GitHub Pages: https://zgrg.github.io/footprint/ (manual trigger only — workflow_dispatch)
+- To deploy: GitHub → Actions → "Deploy to GitHub Pages" → Run workflow
+- Pages source must be set to "GitHub Actions" in repo Settings → Pages
+- gh CLI installed and authenticated as zgrg
+
 ## What NOT to do
 - Do not add any splash screens that require network images
 - Do not add Firebase, Crashlytics, Sentry, or any remote logging
