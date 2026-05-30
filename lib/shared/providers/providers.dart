@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/formula.dart';
 
@@ -10,3 +11,6 @@ final co2ResultProvider = Provider<double>((ref) {
   final factor = ref.watch(lifestyleFactorProvider);
   return co2FromSpend(spend, factor);
 });
+
+/// Drives the app locale. Initialised in main.dart from the OS locale.
+final localeProvider = StateProvider<Locale>((ref) => const Locale('en'));

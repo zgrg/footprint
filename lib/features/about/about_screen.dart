@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants.dart';
+import '../../core/l10n.dart';
 import '../../shared/widgets/yours_label.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -13,13 +14,10 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final body = Theme.of(context)
-        .textTheme
-        .bodySmall
+    final s = AppStrings.of(context);
+    final body = Theme.of(context).textTheme.bodySmall
         ?.copyWith(color: colorMuted, height: 1.7);
-    final heading = Theme.of(context)
-        .textTheme
-        .bodyMedium
+    final heading = Theme.of(context).textTheme.bodyMedium
         ?.copyWith(fontWeight: FontWeight.bold, color: colorText);
 
     return Scaffold(
@@ -34,48 +32,29 @@ class AboutScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Footprint',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
+            Text(s.appTitle,
+                style: Theme.of(context).textTheme.bodyLarge
                     ?.copyWith(fontWeight: FontWeight.bold, fontSize: 22)),
             const SizedBox(height: 6),
-            Text('v1.0  ·  Yours suite', style: body),
+            Text(s.version, style: body),
             const SizedBox(height: 28),
 
-            Text('Privacy Policy', style: heading),
+            Text(s.privacyHeading, style: heading),
             const SizedBox(height: 6),
-            Text(
-              'No internet connection. No data stored. No permissions required.',
-              style: body,
-            ),
+            Text(s.privacyText, style: body),
             const SizedBox(height: 24),
 
-            Text('Formula', style: heading),
+            Text(s.formulaHeading, style: heading),
             const SizedBox(height: 6),
-            Text(
-              'CO₂e (t/yr) = monthly spend × 12 × awareness factor × 0.0007\n\n'
-              'The 0.0007 constant is the EU average consumption-based emission '
-              'intensity (0.7 kg CO₂e / €1), covering all greenhouse gases across '
-              'the full supply chain.',
-              style: body,
-            ),
+            Text(s.formulaText, style: body),
             const SizedBox(height: 24),
 
-            Text('Accuracy & limitations', style: heading),
+            Text(s.accuracyHeading, style: heading),
             const SizedBox(height: 6),
-            Text(
-              'This is an order-of-magnitude estimator (±30%). Intensity varies '
-              'by spending category and rises with income. Comparison benchmarks '
-              'are territorial CO₂ per capita (GCP, 2023) — CO₂ only, not full '
-              'CO₂e — so your result will read somewhat higher than the bars. '
-              'The awareness factor is an illustrative model construct, not a '
-              'published constant.',
-              style: body,
-            ),
+            Text(s.accuracyText, style: body),
             const SizedBox(height: 24),
 
-            Text('References', style: heading),
+            Text(s.referencesHeading, style: heading),
             const SizedBox(height: 8),
             _DoiLink(
               citation: 'Ivanova & Wood (2020). Global Sustainability 3, e18.',
@@ -126,14 +105,10 @@ class _DoiLink extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(citation,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
+                style: Theme.of(context).textTheme.bodySmall
                     ?.copyWith(color: colorMuted, height: 1.5)),
             Text('doi:$doi',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
+                style: Theme.of(context).textTheme.bodySmall
                     ?.copyWith(color: colorGreen, height: 1.4)),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants.dart';
+import '../../core/l10n.dart';
 import '../../shared/providers/providers.dart';
 
 class BenchmarkBar extends ConsumerWidget {
@@ -9,24 +10,23 @@ class BenchmarkBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final co2 = ref.watch(co2ResultProvider);
+    final s   = AppStrings.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Compare',
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
+        Text(s.compare,
+            style: Theme.of(context).textTheme.bodySmall
                 ?.copyWith(color: colorMuted)),
         const SizedBox(height: 12),
-        _BenchmarkRow(label: '2050 target 1.5°C fair share', value: target2050, userCo2: co2),
-        _BenchmarkRow(label: 'Africa avg', value: africaAvg, userCo2: co2),
-        _BenchmarkRow(label: 'S. America avg', value: southAmericaAvg, userCo2: co2),
-        _BenchmarkRow(label: 'Asia avg', value: asiaAvg, userCo2: co2),
-        _BenchmarkRow(label: 'World avg', value: worldAvg, userCo2: co2),
-        _BenchmarkRow(label: 'EU avg', value: euAvg, userCo2: co2),
-        _BenchmarkRow(label: 'Oceania avg', value: oceaniaAvg, userCo2: co2),
-        _BenchmarkRow(label: 'N. America avg', value: northAmericaAvg, userCo2: co2),
+        _BenchmarkRow(label: s.fairShare,    value: target2050,      userCo2: co2),
+        _BenchmarkRow(label: s.africaAvg,    value: africaAvg,       userCo2: co2),
+        _BenchmarkRow(label: s.sAmericaAvg,  value: southAmericaAvg, userCo2: co2),
+        _BenchmarkRow(label: s.asiaAvg,      value: asiaAvg,         userCo2: co2),
+        _BenchmarkRow(label: s.worldAvg,     value: worldAvg,        userCo2: co2),
+        _BenchmarkRow(label: s.euAvg,        value: euAvg,           userCo2: co2),
+        _BenchmarkRow(label: s.oceaniaAvg,   value: oceaniaAvg,      userCo2: co2),
+        _BenchmarkRow(label: s.nAmericaAvg,  value: northAmericaAvg, userCo2: co2),
       ],
     );
   }
@@ -45,9 +45,10 @@ class _BenchmarkRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isBelow = userCo2 <= value;
-    final barMax = [northAmericaAvg * 1.2, userCo2 * 1.1].reduce((a, b) => a > b ? a : b);
-    final fraction = (value / barMax).clamp(0.0, 1.0);
+    final isBelow      = userCo2 <= value;
+    final barMax       = [northAmericaAvg * 1.2, userCo2 * 1.1]
+        .reduce((a, b) => a > b ? a : b);
+    final fraction     = (value / barMax).clamp(0.0, 1.0);
     final userFraction = (userCo2 / barMax).clamp(0.0, 1.0);
 
     return Padding(
@@ -58,7 +59,8 @@ class _BenchmarkRow extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(label, style: Theme.of(context).textTheme.bodySmall),
+              Text(label,
+                  style: Theme.of(context).textTheme.bodySmall),
               Text('${value.toStringAsFixed(1)} t',
                   style: Theme.of(context).textTheme.bodySmall),
             ],
@@ -69,30 +71,26 @@ class _BenchmarkRow extends StatelessWidget {
             return Stack(
               children: [
                 Container(
-                  height: 6,
-                  width: width,
+                  height: 6, width: width,
                   decoration: BoxDecoration(
-                    color: colorElevated,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
+                      color: colorElevated,
+                      borderRadius: BorderRadius.circular(3)),
                 ),
                 Container(
-                  height: 6,
-                  width: width * fraction,
+                  height: 6, width: width * fraction,
                   decoration: BoxDecoration(
-                    color: colorMuted,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
+                      color: colorMuted,
+                      borderRadius: BorderRadius.circular(3)),
                 ),
                 Positioned(
-                  left: width < 4 ? 0.0 : (width * userFraction - 2).clamp(0.0, width - 4),
+                  left: width < 4
+                      ? 0.0
+                      : (width * userFraction - 2).clamp(0.0, width - 4),
                   child: Container(
-                    width: 4,
-                    height: 6,
+                    width: 4, height: 6,
                     decoration: BoxDecoration(
-                      color: isBelow ? colorGreen : colorRed,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
+                        color: isBelow ? colorGreen : colorRed,
+                        borderRadius: BorderRadius.circular(2)),
                   ),
                 ),
               ],

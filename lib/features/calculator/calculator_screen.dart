@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants.dart';
+import '../../shared/widgets/language_selector.dart';
 import '../../shared/widgets/yours_label.dart';
 import 'benchmark_bar.dart';
 import 'lifestyle_slider.dart';
@@ -36,6 +37,9 @@ class CalculatorScreen extends StatelessWidget {
             LifestyleSlider(),
             SizedBox(height: 32),
             BenchmarkBar(),
+            SizedBox(height: 40),
+            LanguageSelector(),
+            SizedBox(height: 24),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants.dart';
 import '../../core/formula.dart';
+import '../../core/l10n.dart';
 import '../../shared/providers/providers.dart';
 
 class ResultDisplay extends ConsumerWidget {
@@ -9,26 +10,21 @@ class ResultDisplay extends ConsumerWidget {
 
   Color _bracketColor(ResultBracket bracket) {
     switch (bracket) {
-      case ResultBracket.green:
-        return colorGreen;
-      case ResultBracket.amber:
-        return colorAmber;
-      case ResultBracket.red:
-        return colorRed;
+      case ResultBracket.green: return colorGreen;
+      case ResultBracket.amber: return colorAmber;
+      case ResultBracket.red:   return colorRed;
     }
-  }
-
-  String _comparison(double co2) {
-    if (co2 < target2050) return 'Below 2050 target 🌱';
-    final times = (co2 / target2050).toStringAsFixed(1);
-    return '$times× the 2050 target (${target2050}t)';
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final co2 = ref.watch(co2ResultProvider);
-    final bracket = resultBracket(co2);
-    final color = _bracketColor(bracket);
+    final co2    = ref.watch(co2ResultProvider);
+    final color  = _bracketColor(resultBracket(co2));
+    final s      = AppStrings.of(context);
+
+    final comparison = co2 < target2050
+        ? s.belowTarget
+        : s.aboveTarget((co2 / target2050).toStringAsFixed(1));
 
     return Column(
       children: [
@@ -36,30 +32,24 @@ class ResultDisplay extends ConsumerWidget {
           tween: Tween<double>(end: co2),
           duration: resultAnimationDuration,
           builder: (context, value, _) {
-            final animBracket = resultBracket(value);
-            final animColor = _bracketColor(animBracket);
-            final accuracy = value * accuracyFraction;
+            final animColor = _bracketColor(resultBracket(value));
+            final accuracy  = value * accuracyFraction;
             return Column(
               children: [
                 Text(
                   value.toStringAsFixed(1),
-                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        color: animColor,
-                      ),
+                  style: Theme.of(context).textTheme.displayLarge
+                      ?.copyWith(color: animColor),
                 ),
                 Text(
-                  't CO₂e / year',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: animColor,
-                        letterSpacing: 1.0,
-                      ),
+                  s.tCO2Year,
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(color: animColor, letterSpacing: 1.0),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '± ${accuracy.toStringAsFixed(1)} t  (±30% estimation range)',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
+                  '± ${accuracy.toStringAsFixed(1)} t  (${s.accuracyRange})',
+                  style: Theme.of(context).textTheme.bodySmall
                       ?.copyWith(color: colorMuted),
                 ),
               ],
@@ -68,10 +58,8 @@ class ResultDisplay extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          _comparison(co2),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
+          comparison,
+          style: Theme.of(context).textTheme.bodyMedium
               ?.copyWith(color: color),
         ),
       ],
