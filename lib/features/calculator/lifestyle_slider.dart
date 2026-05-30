@@ -23,10 +23,18 @@ class LifestyleSlider extends ConsumerWidget {
     return 'Very low';
   }
 
+  // Own scale: High/Very high → green, Average → amber, Low/Very low → red
+  Color _awarenessColor(double awareness) {
+    if (awareness >= 1.2) return colorGreen;
+    if (awareness >= 0.9) return colorAmber;
+    return colorRed;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final factor = ref.watch(lifestyleFactorProvider);
     final awareness = _factorToAwareness(factor);
+    final color = _awarenessColor(awareness);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +48,7 @@ class LifestyleSlider extends ConsumerWidget {
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium
-                    ?.copyWith(color: colorText, fontWeight: FontWeight.bold)),
+                    ?.copyWith(color: color, fontWeight: FontWeight.bold)),
           ],
         ),
         const SizedBox(height: 4),
@@ -52,16 +60,23 @@ class LifestyleSlider extends ConsumerWidget {
               ?.copyWith(color: colorMuted),
         ),
         const SizedBox(height: 8),
-        Slider(
-          value: awareness,
-          min: lifestyleMin,
-          max: lifestyleMax,
-          divisions: ((lifestyleMax - lifestyleMin) / lifestyleStep).round(),
-          onChanged: (v) {
-            final newFactor = _awarenessToFactor(
-                double.parse(v.toStringAsFixed(1)));
-            ref.read(lifestyleFactorProvider.notifier).state = newFactor;
-          },
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            activeTrackColor: color,
+            thumbColor: color,
+            overlayColor: color.withAlpha(40),
+          ),
+          child: Slider(
+            value: awareness,
+            min: lifestyleMin,
+            max: lifestyleMax,
+            divisions: ((lifestyleMax - lifestyleMin) / lifestyleStep).round(),
+            onChanged: (v) {
+              final newFactor = _awarenessToFactor(
+                  double.parse(v.toStringAsFixed(1)));
+              ref.read(lifestyleFactorProvider.notifier).state = newFactor;
+            },
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

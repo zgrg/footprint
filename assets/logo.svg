@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Footprint gradient: lighter warm green at top, deeper at heel -->
+    <linearGradient id="footGrad" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%"   stop-color="#62C78A"/>
+      <stop offset="100%" stop-color="#357A52"/>
+    </linearGradient>
+    <!-- Subtle radial glow behind footprint -->
+    <radialGradient id="glowGrad" cx="50%" cy="48%" r="42%">
+      <stop offset="0%"   stop-color="#4A9B6F" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#4A9B6F" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Inner shadow for depth on sole -->
+    <filter id="innerShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="18" result="blur"/>
+      <feOffset dx="0" dy="8" result="offsetBlur"/>
+      <feComposite in="offsetBlur" in2="SourceGraphic" operator="in" result="shadow"/>
+      <feColorMatrix in="shadow" type="matrix"
+        values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 0.35 0"
+        result="coloredShadow"/>
+      <feMerge>
+        <feMergeNode in="SourceGraphic"/>
+        <feMergeNode in="coloredShadow"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background: warm near-black rounded square -->
+  <rect width="1024" height="1024" rx="224" fill="#0F0F0E"/>
+
+  <!-- Surface card behind footprint for slight lift -->
+  <rect x="212" y="148" width="600" height="728" rx="80" fill="#1A1917"/>
+
+  <!-- Ambient glow -->
+  <ellipse cx="512" cy="490" rx="310" ry="380" fill="url(#glowGrad)"/>
+
+  <!-- Footprint, left foot plantar view, centered at 512,490 -->
+  <g transform="translate(512,490)" filter="url(#innerShadow)">
+
+    <!-- ── Sole ── organic left-foot sole shape -->
+    <path fill="url(#footGrad)" d="
+      M -108,-205
+      C -155,-198 -192,-155 -196,-95
+      C -200,-35  -192,25  -184,72
+      C -188,112  -194,155 -192,205
+      C -188,278  -148,328 -82,342
+      C -42,350   8,348   48,334
+      C 100,314   128,272  128,220
+      C 128,174   110,132  104,96
+      C 116,58    138,10   142,-46
+      C 146,-108  126,-174  86,-210
+      C 56,-236   16,-244  -24,-242
+      C -60,-240  -86,-220 -108,-205
+      Z
+    "/>
+
+    <!-- ── Arch highlight: subtle lighter streak on the inner (left) side ── -->
+    <path fill="#62C78A" opacity="0.22" d="
+      M -108,-205
+      C -130,-185 -148,-140 -152,-80
+      C -156,-25  -148,30  -140,72
+      C -108,-205 -108,-205
+      Z
+    "/>
+
+    <!-- ── Toes: 5 ellipses in natural arc ── -->
+    <!-- Big toe (inner / left, largest) -->
+    <ellipse fill="url(#footGrad)" cx="-122" cy="-278" rx="50"  ry="58"/>
+    <!-- 2nd toe -->
+    <ellipse fill="url(#footGrad)" cx="-58"  cy="-308" rx="38"  ry="46"/>
+    <!-- 3rd toe (tallest) -->
+    <ellipse fill="url(#footGrad)" cx="6"    cy="-316" rx="36"  ry="44"/>
+    <!-- 4th toe -->
+    <ellipse fill="url(#footGrad)" cx="66"   cy="-304" rx="30"  ry="38"/>
+    <!-- 5th / pinky (outer / right, smallest) -->
+    <ellipse fill="url(#footGrad)" cx="118"  cy="-278" rx="24"  ry="30"/>
+
+  </g>
+
+  <!-- "yours" suite wordmark, small, muted, bottom-center -->
+  <text
+    x="512" y="938"
+    text-anchor="middle"
+    font-family="'DM Sans', 'Helvetica Neue', Arial, sans-serif"
+    font-size="38"
+    font-weight="300"
+    letter-spacing="8"
+    fill="#7A7875"
+  >yours</text>
+
+</svg>
