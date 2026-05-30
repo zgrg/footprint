@@ -7,7 +7,7 @@ class YoursLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Yours',
+      'NoTrackApps',
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: colorMuted,
             fontFamily: 'DM Sans',

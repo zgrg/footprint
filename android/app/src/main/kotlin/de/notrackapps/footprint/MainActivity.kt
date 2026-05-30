@@ -1,4 +1,4 @@
-package app.yours.footprint
+package de.notrackapps.footprint
 
 import io.flutter.embedding.android.FlutterActivity
 

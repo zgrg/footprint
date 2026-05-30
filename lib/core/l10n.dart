@@ -119,8 +119,8 @@ const _data = <String, Map<String, String>>{
     'euAvg':          'EU avg',
     'oceaniaAvg':     'Oceania avg',
     'nAmericaAvg':    'N. America avg',
-    'appTitle':       'Footprint',
-    'version':        'v1.0  ·  Yours suite',
+    'appTitle':       'Co2 Footprint Easy',
+    'version':        'v1.0  ·  NoTrackApps',
     'privacyHeading': 'Privacy',
     'privacyText':    'No internet connection. No data stored. No permissions required.',
     'formulaHeading': 'Formula',
@@ -136,7 +136,7 @@ const _data = <String, Map<String, String>>{
                       'The awareness factor is an illustrative model construct, not a '
                       'published constant.',
     'referencesHeading': 'References',
-    'yours':          'Yours',
+    'yours':          'NoTrackApps',
   },
 
   // ── Mandarin Chinese ──────────────────────────────────────
@@ -162,8 +162,8 @@ const _data = <String, Map<String, String>>{
     'euAvg':          '欧盟均值',
     'oceaniaAvg':     '大洋洲均值',
     'nAmericaAvg':    '北美均值',
-    'appTitle':       '足迹',
-    'version':        'v1.0  ·  Yours 套件',
+    'appTitle':       'Co2 Footprint Easy',
+    'version':        'v1.0  ·  NoTrackApps',
     'privacyHeading': '隐私',
     'privacyText':    '无网络连接，不存储数据，无需任何权限。',
     'formulaHeading': '计算公式',
@@ -175,7 +175,7 @@ const _data = <String, Map<String, String>>{
                       '对比基准为各地区领土CO₂人均排放（仅CO₂，非CO₂e），'
                       '因此您的结果可能高于参考值。碳意识系数为模型构建值，非文献发表常数。',
     'referencesHeading': '参考文献',
-    'yours':          'Yours',
+    'yours':          'NoTrackApps',
   },
 
   // ── Hindi ─────────────────────────────────────────────────
@@ -201,8 +201,8 @@ const _data = <String, Map<String, String>>{
     'euAvg':          'EU औसत',
     'oceaniaAvg':     'ओशिनिया औसत',
     'nAmericaAvg':    'उत्तर अमेरिका औसत',
-    'appTitle':       'फुटप्रिंट',
-    'version':        'v1.0  ·  Yours सुइट',
+    'appTitle':       'Co2 Footprint Easy',
+    'version':        'v1.0  ·  NoTrackApps',
     'privacyHeading': 'गोपनीयता',
     'privacyText':    'कोई इंटरनेट कनेक्शन नहीं। कोई डेटा संग्रहीत नहीं। कोई अनुमति आवश्यक नहीं।',
     'formulaHeading': 'सूत्र',
@@ -216,7 +216,7 @@ const _data = <String, Map<String, String>>{
                       'CO₂ प्रति व्यक्ति हैं (केवल CO₂, CO₂e नहीं), इसलिए आपका '
                       'परिणाम बार से कुछ अधिक हो सकता है।',
     'referencesHeading': 'संदर्भ',
-    'yours':          'Yours',
+    'yours':          'NoTrackApps',
   },
 
   // ── Spanish ───────────────────────────────────────────────
@@ -242,8 +242,8 @@ const _data = <String, Map<String, String>>{
     'euAvg':          'Media UE',
     'oceaniaAvg':     'Media Oceanía',
     'nAmericaAvg':    'Media N. América',
-    'appTitle':       'Huella',
-    'version':        'v1.0  ·  Suite Yours',
+    'appTitle':       'Co2 Footprint Easy',
+    'version':        'v1.0  ·  NoTrackApps',
     'privacyHeading': 'Privacidad',
     'privacyText':    'Sin conexión a internet. Sin datos almacenados. Sin permisos requeridos.',
     'formulaHeading': 'Fórmula',
@@ -257,7 +257,7 @@ const _data = <String, Map<String, String>>{
                       'de referencia son CO₂ territorial per cápita (solo CO₂, no CO₂e), '
                       'por lo que tu resultado puede ser algo mayor que las barras.',
     'referencesHeading': 'Referencias',
-    'yours':          'Yours',
+    'yours':          'NoTrackApps',
   },
 
   // ── French ────────────────────────────────────────────────
@@ -283,8 +283,8 @@ const _data = <String, Map<String, String>>{
     'euAvg':          'Moy. UE',
     'oceaniaAvg':     'Moy. Océanie',
     'nAmericaAvg':    'Moy. Amér. du Nord',
-    'appTitle':       'Empreinte',
-    'version':        'v1.0  ·  Suite Yours',
+    'appTitle':       'Co2 Footprint Easy',
+    'version':        'v1.0  ·  NoTrackApps',
     'privacyHeading': 'Confidentialité',
     'privacyText':    'Pas de connexion internet. Aucune donnée stockée. Aucune permission requise.',
     'formulaHeading': 'Formule',
@@ -299,6 +299,6 @@ const _data = <String, Map<String, String>>{
                       '(CO₂ uniquement, pas CO₂e), donc votre résultat peut être '
                       'légèrement supérieur aux barres.',
     'referencesHeading': 'Références',
-    'yours':          'Yours',
+    'yours':          'NoTrackApps',
   },
 };

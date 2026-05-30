@@ -1,6 +1,6 @@
-# Footprint
+# Co2 Footprint Easy
 
-A radically simple CO₂ footprint estimator. Part of the **Yours** suite of privacy-first tools.
+A radically simple CO₂ footprint estimator by **NoTrackApps**.
 
 Two sliders. One number. No accounts, no tracking, no permissions, no network calls.
 
@@ -66,4 +66,4 @@ Key references:
 ## License
 
 MIT — see [LICENSE](LICENSE).  
-Copyright (c) 2026 Gergely Zuban.
+Copyright (c) 2026 NoTrackApps (Gergely Zuban).
