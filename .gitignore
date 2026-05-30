@@ -51,5 +51,6 @@ android/.kotlin/
 *.jks
 *.p12
 *.keystore
+android/key.properties
 google-services.json
 GoogleService-Info.plist
